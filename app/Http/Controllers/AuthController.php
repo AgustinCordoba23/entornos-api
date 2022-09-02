@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\UnprocessableEntityException;
+use App\Http\Requests\CambiarPasswordRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegistroRequest;
 use App\Http\Resources\UsuarioResource;
@@ -60,6 +61,17 @@ class AuthController extends Controller
     public function me() {
         /** @var Usuario $user */
         $usuario = Auth::user();
+
+        return new UsuarioResource($usuario);
+    }
+
+    public function cambiarPassword(CambiarPasswordRequest $request) {
+        $nuevaPassword = $request->nueva_password;
+
+        $usuario = Auth::user();
+
+        $usuario->password = Hash::make($nuevaPassword);
+        $usuario->save();
 
         return new UsuarioResource($usuario);
     }
