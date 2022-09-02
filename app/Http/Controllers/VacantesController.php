@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\VacanteRequest;
 use App\Http\Resources\VacanteResource;
 use App\Models\Vacante;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class VacantesController
 {
@@ -19,5 +21,18 @@ class VacantesController
         ]);
 
         return new VacanteResource($vacante);
+    }
+
+    public function listar(Request $request) {
+        $filtros = $request->input('filtros', []);
+        $vacantes = DB::table("vacantes");
+
+        foreach ($filtros as $key => $value) {
+            $vacantes->where($key, 'LIKE', '%'.$value.'%');
+        }
+
+        $vacantes = $vacantes->get();
+
+        return $vacantes;
     }
 }

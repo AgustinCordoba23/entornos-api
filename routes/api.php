@@ -23,11 +23,12 @@ Route::get('/users', [UsuariosController::class, 'get_users']);
 
 Route::post('/registrar', [AuthController::class, 'registrar']);
 Route::post('/login', [AuthController::class, 'login']);
-Route::post('/vacantes', [VacantesController::class, 'crear']);
+Route::get('/vacantes', [VacantesController::class, 'listar']);
 
 Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::post('/cambiar-password', [AuthController::class, 'cambiarPassword']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
+    Route::post('/vacantes', [VacantesController::class, 'crear']);
 });
 
