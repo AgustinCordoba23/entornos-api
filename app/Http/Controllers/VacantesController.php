@@ -35,4 +35,22 @@ class VacantesController
 
         return $vacantes;
     }
+
+    public function getOne(int $vacanteId) {
+        $vacantes = DB::table("vacantes");
+        return $vacantes->where('id', '=', $vacanteId)->get();
+    }
+
+    /*
+    public function modificar(Tecnologia $tecnologia, UpdateTecnologiaRequest $request) {
+        $currentUser = auth('api')->user();
+        TecnologiasBusiness::validateUpdate($currentUser);
+
+        $tecnologiaDto = TecnologiaDto::fromArray($request->validated());
+
+        $tecnologia = TecnologiasBusiness::update($tecnologia, $tecnologiaDto);
+
+        return new TecnologiaResource($tecnologia);
+    }
+    */
 }
