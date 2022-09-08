@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\BusinessException;
 use App\Exceptions\UnprocessableEntityException;
 use App\Http\Requests\CambiarPasswordRequest;
 use App\Http\Requests\LoginRequest;
@@ -19,11 +20,16 @@ class AuthController extends Controller
 
         if (!Auth::attempt($credenciales)) {
             return response()->json([
-                'message' => 'Bad credentials'
+                'message' => 'Credenciales inválidas'
             ], 401);
         }
 
         $usuario = Usuario::where('email', $credenciales['email'])->first();
+
+        if ($usuario->estado !== 'HABILITADO') {
+            throw new BusinessException('Credenciales inválidas');
+        }
+
         $token = $usuario->createToken('bearer-token')->plainTextToken;
 
         $usuario->load('rol_relacion');
@@ -74,6 +80,17 @@ class AuthController extends Controller
         $usuario->save();
 
         return new UsuarioResource($usuario);
+    }
+
+    public function eliminar(Request $request) {
+        $usuario = Auth::user();
+
+        $usuario->estado = 'DESHABILITADO';
+        $usuario->save();
+
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json([], 200);
     }
 
 
