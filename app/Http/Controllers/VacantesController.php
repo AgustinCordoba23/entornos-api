@@ -55,4 +55,14 @@ class VacantesController
         return $vacantes->where('id', '=', $vacanteId)->get();
     }
 
+    public function eliminar(int $vacanteId) {
+        $vacantes = DB::table("vacantes");
+
+        //@Todo eliminar registros en cascada que tengan esta vacante
+
+        $vacantes->where('id', '=', $vacanteId)->delete();
+
+        return response()->json([], 200);
+    }
+
 }
