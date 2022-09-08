@@ -82,6 +82,17 @@ class AuthController extends Controller
         return new UsuarioResource($usuario);
     }
 
+    public function eliminar(Request $request) {
+        $usuario = Auth::user();
+
+        $usuario->estado = 'DESHABILITADO';
+        $usuario->save();
+
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json([], 200);
+    }
+
 
 }
 
