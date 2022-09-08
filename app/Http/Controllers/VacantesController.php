@@ -41,16 +41,18 @@ class VacantesController
         return $vacantes->where('id', '=', $vacanteId)->get();
     }
 
-    /*
-    public function modificar(Tecnologia $tecnologia, UpdateTecnologiaRequest $request) {
-        $currentUser = auth('api')->user();
-        TecnologiasBusiness::validateUpdate($currentUser);
+    public function modificar(int $vacanteId, VacanteRequest $request) {
+        $campos = $request->only('catedra', 'descripcion', 'fecha_fin');
 
-        $tecnologiaDto = TecnologiaDto::fromArray($request->validated());
+        $vacantes = DB::table("vacantes");
 
-        $tecnologia = TecnologiasBusiness::update($tecnologia, $tecnologiaDto);
+        $vacantes->where('id', '=', $vacanteId)->update([
+            'catedra' => $campos['catedra'],
+            'descripcion' => $campos['descripcion'],
+            'fecha_fin' => $campos['fecha_fin'],
+        ]);
 
-        return new TecnologiaResource($tecnologia);
+        return $vacantes->where('id', '=', $vacanteId)->get();
     }
-    */
+
 }

@@ -21,6 +21,6 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     //Vacantes
     Route::post('/vacantes', [VacantesController::class, 'crear']);
     Route::get('/vacantes/{id}', [VacantesController::class, 'getOne']);
-    Route::patch('/vacantes/{id}', [VacantesController::class, 'modificar']);
+    Route::put('/vacantes/{id}', [VacantesController::class, 'modificar']);
 });
 
