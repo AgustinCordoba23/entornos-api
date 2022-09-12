@@ -26,8 +26,12 @@ class AuthController extends Controller
 
         $usuario = Usuario::where('email', $credenciales['email'])->first();
 
-        if ($usuario->estado !== 'HABILITADO') {
+        if ($usuario->estado == 'DESHABILITADO') {
             throw new BusinessException('Credenciales inválidas');
+        }
+
+        if ($usuario->estado == 'PENDIENTE') {
+            throw new BusinessException('Usuario pendiente de aprobación');
         }
 
         $token = $usuario->createToken('bearer-token')->plainTextToken;
@@ -47,7 +51,8 @@ class AuthController extends Controller
             'nombre' => $campos['nombre'],
             'email' => $campos['email'],
             'rol' => $campos['rol'],
-            'password' => bcrypt($campos['password'])
+            'password' => bcrypt($campos['password']),
+            'estado' => $campos['rol'] == 1 ? 'PENDIENTE' : 'HABILITADO'
         ]);
 
         $token = $usuario->createToken('bearer-token')->plainTextToken;
