@@ -12,11 +12,17 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::get('/vacantes', [VacantesController::class, 'listar']);
 
 Route::group(['middleware' => 'auth:sanctum'], function() {
-    //Usuarios
+    //Auth
     Route::post('/cambiar-password', [AuthController::class, 'cambiarPassword']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::delete('/eliminar-usuario', [AuthController::class, 'eliminar']);
     Route::get('/me', [AuthController::class, 'me']);
+
+    //Usuarios
+    Route::get('/usuarios/listar', [UsuariosController::class, 'listar']);
+    Route::get('/usuarios/{id}', [UsuariosController::class, 'getOne']);
+    Route::post('/usuarios/{id}/habilitar', [UsuariosController::class, 'habilitar']);
+    Route::post('/usuarios/{id}/deshabilitar', [UsuariosController::class, 'deshabilitar']);
 
     //Vacantes
     Route::post('/vacantes', [VacantesController::class, 'crear']);
