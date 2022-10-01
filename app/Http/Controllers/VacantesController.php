@@ -3,12 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\VacanteRequest;
+use App\Http\Resources\UsuarioVacanteResource;
 use App\Http\Resources\VacanteResource;
+use App\Models\Usuario;
+use App\Models\UsuarioVacante;
 use App\Models\Vacante;
+use App\Modules\Auth\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-class VacantesController
+class VacantesController extends Controller
 {
 
     public function crear(VacanteRequest $request) {
@@ -63,6 +68,27 @@ class VacantesController
         $vacantes->where('id', '=', $vacanteId)->delete();
 
         return response()->json([], 200);
+    }
+
+    public function postularme(int $vacanteId, Request $request) {
+
+        /** @var Usuario $user */
+        $usuario = Auth::user();
+
+        $archivo = $request->file('cv');
+
+        $cv = uniqid() . '*' . $archivo->getClientOriginalName();
+
+        $ruta = public_path() . '/cvs/';
+        $archivo->move($ruta, $cv);
+
+        $usuario_vacante = UsuarioVacante::create([
+            'usuario_id' => $usuario->id,
+            'vacante_id' => $vacanteId,
+            'cv' => $cv,
+        ]);
+
+        return new UsuarioVacanteResource($usuario_vacante);
     }
 
 }
