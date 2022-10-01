@@ -62,23 +62,20 @@ class VacantesController extends Controller
 
     public function eliminar(int $vacanteId) {
         $vacantes = DB::table("vacantes");
-
-        //@Todo eliminar registros en cascada que tengan esta vacante
+        $usuarios_vacantes = DB::table("usuarios_vacantes");
 
         $vacantes->where('id', '=', $vacanteId)->delete();
+        $usuarios_vacantes->where('vacante_id', '=', $vacanteId)->delete();
 
         return response()->json([], 200);
     }
 
     public function postularme(int $vacanteId, Request $request) {
-
         /** @var Usuario $user */
         $usuario = Auth::user();
 
         $archivo = $request->file('cv');
-
         $cv = uniqid() . '*' . $archivo->getClientOriginalName();
-
         $ruta = public_path() . '/cvs/';
         $archivo->move($ruta, $cv);
 
@@ -89,6 +86,18 @@ class VacantesController extends Controller
         ]);
 
         return new UsuarioVacanteResource($usuario_vacante);
+    }
+
+    public function misPostulaciones() {
+        $usuarios_vacantes = DB::table("usuarios_vacantes");
+
+        /** @var Usuario $user */
+        $usuario = Auth::user();
+
+        $postulaciones = $usuarios_vacantes->join('vacantes', 'usuarios_vacantes.vacante_id', '=', 'vacantes.id');
+        $postulaciones = $postulaciones->where('usuario_id', '=', $usuario->id)->get();
+
+        return $postulaciones;
     }
 
 }
