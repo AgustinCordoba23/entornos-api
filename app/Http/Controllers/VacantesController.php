@@ -96,7 +96,7 @@ class VacantesController extends Controller
         if (!$resultado->first()) {
             $archivo = $request->file('cv');
             $cv = uniqid() . '*' . $archivo->getClientOriginalName();
-            $ruta = public_path() . '/cvs/';
+            $ruta = '/public/cvs/';
             $archivo->move($ruta, $cv);
 
             $usuario_vacante = UsuarioVacante::create([
