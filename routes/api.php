@@ -31,6 +31,7 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::put('/vacantes/{id}', [VacantesController::class, 'modificar']);
     Route::delete('/vacantes/{id}', [VacantesController::class, 'eliminar']);
     Route::post('/vacantes/{id}/postularme', [VacantesController::class, 'postularme']);
+    Route::post('/vacantes/{id}/cargar-resultados', [VacantesController::class, 'cargarResultados']);
     Route::get('/vacantes/descargar-pdf/{nombre}', [VacantesController::class, 'descargarArchivo']);
 });
 
