@@ -95,9 +95,24 @@ class VacantesController extends Controller
         $usuario = Auth::user();
 
         $postulaciones = $usuarios_vacantes->join('vacantes', 'usuarios_vacantes.vacante_id', '=', 'vacantes.id');
-        $postulaciones = $postulaciones->where('usuario_id', '=', $usuario->id)->get();
+        $postulaciones = $postulaciones->where('usuario_id', '=', $usuario->id)->select('catedra', 'fecha_fin', 'orden_merito', 'cv')->get();
 
         return $postulaciones;
     }
+
+    public function descargarArchivo(string $archivo) {
+        $ruta = public_path() ."/cvs/" . $archivo;
+
+        if (file_exists($ruta)) {
+            $headers = [
+                'Content-Type' => 'application/pdf',
+            ];
+            return response()->download($ruta, "{$archivo}", $headers);
+        } else {
+            return "El archivo no existe";
+        }
+    }
+
+
 
 }
