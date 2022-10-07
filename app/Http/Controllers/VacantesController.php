@@ -37,7 +37,7 @@ class VacantesController extends Controller
             $vacantes->where($key, 'LIKE', '%'.$value.'%');
         }
 
-        $vacantes = $vacantes->get();
+        $vacantes = $vacantes->orderBy('fecha_fin', 'DESC')->get();
 
         return $vacantes;
     }
