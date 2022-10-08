@@ -10,6 +10,7 @@ use App\Http\Controllers\AuthController;
 Route::post('/registrar', [AuthController::class, 'registrar']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/vacantes', [VacantesController::class, 'listar']);
+Route::get('/vacantes/descargar-pdf/{nombre}', [VacantesController::class, 'descargarArchivo']);
 
 Route::group(['middleware' => 'auth:sanctum'], function() {
     //Auth
@@ -32,6 +33,5 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::delete('/vacantes/{id}', [VacantesController::class, 'eliminar']);
     Route::post('/vacantes/{id}/postularme', [VacantesController::class, 'postularme']);
     Route::post('/vacantes/{id}/cargar-resultados', [VacantesController::class, 'cargarResultados']);
-    Route::get('/vacantes/descargar-pdf/{nombre}', [VacantesController::class, 'descargarArchivo']);
 });
 
