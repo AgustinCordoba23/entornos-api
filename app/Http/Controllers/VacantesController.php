@@ -50,7 +50,8 @@ class VacantesController extends Controller
         $usuarios_vacantes = DB::table("usuarios_vacantes");
 
         $postulaciones = $usuarios_vacantes->join('usuarios', 'usuarios_vacantes.usuario_id', '=', 'usuarios.id');
-        $postulaciones = $postulaciones->where('vacante_id', '=', $vacanteId)->select('usuarios.id', 'nombre', 'email', 'orden_merito')->get();
+        $postulaciones = $postulaciones->where('vacante_id', '=', $vacanteId)->select('usuarios.id', 'nombre', 'email', 'orden_merito', 'cv');
+        $postulaciones = $postulaciones->orderBy('orden_merito', 'asc')->get();
 
         return new JsonResource([
                 "vacante" => $vacante,
@@ -119,7 +120,8 @@ class VacantesController extends Controller
         $usuario = Auth::user();
 
         $postulaciones = $usuarios_vacantes->join('vacantes', 'usuarios_vacantes.vacante_id', '=', 'vacantes.id');
-        $postulaciones = $postulaciones->where('usuario_id', '=', $usuario->id)->select('catedra', 'fecha_fin', 'orden_merito', 'cv')->get();
+        $postulaciones = $postulaciones->where('usuario_id', '=', $usuario->id)->select('catedra', 'fecha_fin', 'orden_merito', 'cv');
+        $postulaciones = $postulaciones->orderBy('orden_merito', 'asc')->get();
 
         return $postulaciones;
     }
