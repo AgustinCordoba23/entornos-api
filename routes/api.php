@@ -8,8 +8,11 @@ use App\Http\Controllers\AuthController;
 Route::post('/registrar', [AuthController::class, 'registrar']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/vacantes', [VacantesController::class, 'listar']);
-Route::get('/hora', [VacantesController::class, 'hora']);
 Route::get('/vacantes/descargar-pdf/{nombre}', [VacantesController::class, 'descargarArchivo']);
+
+//@Todo borrar
+Route::get('/hora', [VacantesController::class, 'hora']);
+Route::get('/mail', [VacantesController::class, 'mail']);
 
 Route::group(['middleware' => 'auth:sanctum'], function() {
     //Auth
