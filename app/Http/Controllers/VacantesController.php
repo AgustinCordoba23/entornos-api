@@ -180,18 +180,5 @@ class VacantesController extends Controller
         );
     }
 
-    //@Todo borrar
-    public function hora(){
-        //hora actual -> 13.40, hora sv -> 16.40
-        return  Carbon::now();
-    }
-    public function mail(){
-        Mail::send('testMail', [],
-            function ($message) {
-                $message->from('info@entornos-frro.tk');
-                $message->to('agustincordoba28@gmail.com', 'Test')
-                ->subject('Mail test');
-            }
-        );
-    }
+    //hora actual -> 13.40, hora sv -> 16.40
 }
