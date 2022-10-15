@@ -32,7 +32,7 @@ class Kernel extends ConsoleKernel
                     $cvs[] = $usuario_vacante->cv;
                 }
 
-                //@Todo enviar mail a todos los responsables
+                //@Todo enviar mail a todos los jefes de cátedras (rol=1)
                 Mail::send('cargarResultado', [
                     'vacante' => $vacante,
                     'cvs' => $cvs,
@@ -44,7 +44,7 @@ class Kernel extends ConsoleKernel
                     }
                 );
             }
-        })->dailyAt('18:00');
+        })->dailyAt('12:00');
     }
 
     protected function commands()
