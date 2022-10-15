@@ -13,7 +13,7 @@ use App\Modules\Auth\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\DB;use Illuminate\Support\Facades\Mail;
 
 class VacantesController extends Controller
 {
@@ -152,10 +152,31 @@ class VacantesController extends Controller
                         'orden_merito' => $orden_meritos[$i]
                     ]
                 );
+
+            if($orden_meritos[$i] == 1){
+                $this->enviarEmailGanador($usuarios_id[$i], $vacanteId);
+            }
         }
 
         return $this->getOne($vacanteId);
     }
+    
+    public function enviarEmailGanador(int $usuarioId, int $vacanteId){
+        $usuarios = DB::table("usuarios");
+        $usuario = $usuarios->where('id', '=', $usuarioId)->first();
 
+        $vacantes = DB::table("vacantes");
+        $vacante = $vacantes->where('id', '=', $vacanteId)->first();
 
+        Mail::send('ganadorVacante', [
+            'nombre' => $usuario->nombre,
+            'vacante' => $vacante->catedra,
+            ],
+            function ($message) use ($usuario) {
+                $message->from('info@entornos-frro.tk');
+                $message->to($usuario->email, $usuario->nombre)
+                ->subject('Actualización de vacante');
+            }
+        );
+    }
 }
