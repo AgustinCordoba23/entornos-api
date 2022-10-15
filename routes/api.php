@@ -5,10 +5,10 @@ use App\Http\Controllers\VacantesController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
-
 Route::post('/registrar', [AuthController::class, 'registrar']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/vacantes', [VacantesController::class, 'listar']);
+Route::get('/hora', [VacantesController::class, 'hora']);
 Route::get('/vacantes/descargar-pdf/{nombre}', [VacantesController::class, 'descargarArchivo']);
 
 Route::group(['middleware' => 'auth:sanctum'], function() {
@@ -33,4 +33,6 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::post('/vacantes/{id}/postularme', [VacantesController::class, 'postularme']);
     Route::post('/vacantes/{id}/cargar-resultados', [VacantesController::class, 'cargarResultados']);
 });
+
+
 

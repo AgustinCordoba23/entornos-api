@@ -10,7 +10,7 @@ use App\Models\Usuario;
 use App\Models\UsuarioVacante;
 use App\Models\Vacante;
 use App\Modules\Auth\Models\User;
-use Illuminate\Http\Request;
+use Carbon\Carbon;use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;use Illuminate\Support\Facades\Mail;
@@ -178,5 +178,9 @@ class VacantesController extends Controller
                 ->subject('Actualización de vacante');
             }
         );
+    }
+
+    public function hora(){
+        return  Carbon::now();
     }
 }
