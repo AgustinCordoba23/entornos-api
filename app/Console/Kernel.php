@@ -32,19 +32,23 @@ class Kernel extends ConsoleKernel
                     $cvs[] = $usuario_vacante->cv;
                 }
 
-                //@Todo enviar mail a todos los jefes de cátedras (rol=1)
-                Mail::send('cargarResultado', [
-                    'vacante' => $vacante,
-                    'cvs' => $cvs,
-                    ],
-                    function ($message){
-                        $message->from('info@entornos-frro.tk');
-                        $message->to('agustincordoba28@gmail.com', 'Test')
-                        ->subject('Habilitación a cargar resultado');
-                    }
-                );
+                $usuarios = DB::table("usuarios");
+                $usuariosJefesCatedra = $usuarios->where("rol", "=", "1")->get();
+
+                foreach ($usuariosJefesCatedra as $jefeCatedra){
+                    Mail::send('cargarResultado', [
+                        'vacante' => $vacante,
+                        'cvs' => $cvs,
+                        ],
+                        function ($message) use ($jefeCatedra) {
+                            $message->from('info@entornos-frro.tk');
+                            $message->to($jefeCatedra->email, $jefeCatedra->nombre)
+                            ->subject('Habilitación a cargar resultado');
+                        }
+                    );
+                }
             }
-        })->dailyAt('12:00');
+        })->daily(); //a medianoche
     }
 
     protected function commands()
